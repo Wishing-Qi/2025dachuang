@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>横向图片墙</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 第一张图片 -->
+        <section class="image-section" id="image1">
+            <a href="#" class="image-wrapper">
+                <img src="https://picsum.photos/1200/800?random=1" alt="图片1" class="image">
+                <div class="image-text">皮影</div>
+            </a>
+        </section>
+
+        <!-- 第二张图片 -->
+        <section class="image-section" id="image2">
+            <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                <img src="https://picsum.photos/1200/800?random=2" alt="图片2" class="image">
+                <div class="image-text">历史起源</div>
+            </a>
+        </section>
+
+        <!-- 第三张图片 -->
+        <section class="image-section" id="image3">
+            <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                <img src="https://picsum.photos/1200/800?random=3" alt="图片3" class="image">
+                <div class="image-text">艺术流派</div>
+            </a>
+        </section>
+
+        <!-- 第四张图片 -->
+        <section class="image-section" id="image4">
+            <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                <img src="https://picsum.photos/1200/800?random=4" alt="图片4" class="image">
+                <div class="image-text">皮影资讯</div>
+            </a>
+        </section>
+
+        <!-- 第五张图片 -->
+        <section class="image-section" id="image5">
+            <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                <img src="https://picsum.photos/1200/800?random=5" alt="图片5" class="image">
+                <div class="image-text">非遗保护</div>
+            </a>
+        </section>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

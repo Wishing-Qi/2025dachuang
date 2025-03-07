@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>详细内容</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <!-- 返回按钮 -->
+        <button onclick="goBack()" class="back-button">返回</button>
+
+        <!-- 详细内容区域 -->
+        <div class="detail-content">
+            <h1>皮影起源</h1>
+            <p>皮影的历史可以追溯到数千年前...</p>
+        </div>
+
+        <!-- 左侧堆叠的图片容器 -->
+        <div class="stacked-container left">
+            <!-- 第一张堆叠图片 -->
+            <section class="stacked-section">
+                <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                    <img src="https://picsum.photos/1200/800?random=1 " alt="堆叠图片1" class="image">
+                    <div class="image-text">堆叠文字1</div>
+                </a>
+            </section>
+
+            <!-- 第二张堆叠图片 -->
+            <section class="stacked-section">
+                <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                    <img src="https://picsum.photos/1200/800?random=2 " alt="堆叠图片2" class="image">
+                    <div class="image-text">堆叠文字2</div>
+                </a>
+            </section>
+        </div>
+
+        <!-- 右侧堆叠的图片容器 -->
+        <div class="stacked-container right">
+            <!-- 第三张堆叠图片 -->
+            <section class="stacked-section">
+                <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                    <img src="https://picsum.photos/1200/800?random=3 " alt="堆叠图片3" class="image">
+                    <div class="image-text">堆叠文字3</div>
+                </a>
+            </section>
+
+            <!-- 第四张堆叠图片 -->
+            <section class="stacked-section">
+                <a href="#" class="image-wrapper" onclick="toggleStacked(this)">
+                    <img src="https://picsum.photos/1200/800?random=4 " alt="堆叠图片4" class="image">
+                    <div class="image-text">堆叠文字4</div>
+                </a>
+            </section>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
