@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>地图点击显示文本</title>
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+        .map {
+            position: relative;
+        }
+        .map img {
+            max-width: 100%;
+            height: auto;
+        }
+        .description {
+            margin-top: 20px;
+            width: 300px;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background: #e0e0e0;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="map">
+            <img src="map.jpg" alt="地图" id="map">
+        </div>
+        <div class="description" id="description">
+            点击地图上的不同位置以显示不同的文字。
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const map = document.getElementById('map');
+            const description = document.getElementById('description');
+
+            map.addEventListener('click', (event) => {
+                const x = event.offsetX;
+                const y = event.offsetY;
+
+                // 根据点击位置显示不同的文字
+                if (x < map.width / 2 && y < map.height / 2) {
+                    description.textContent = '你点击了地图的左上角区域。';
+                } else if (x >= map.width / 2 && y < map.height / 2) {
+                    description.textContent = '你点击了地图的右上角区域。';
+                } else if (x < map.width / 2 && y >= map.height / 2) {
+                    description.textContent = '你点击了地图的左下角区域。';
+                } else {
+                    description.textContent = '你点击了地图的右下角区域。';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

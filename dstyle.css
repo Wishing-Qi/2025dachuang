@@ -1,0 +1,121 @@
+@font-face {
+    font-family: '鼎猎宋体';
+    src: url('assets/fonts/鼎猎宋体.woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+body {
+    font-family: '鼎猎宋体', Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-color: #f9f4dc;
+}
+
+.timeline-container {
+    width: 100%;
+    overflow-x: auto;
+    scroll-behavior: smooth;
+    white-space: nowrap;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 200px; /* 添加左侧内边距 */
+}
+
+.timeline {
+    display: flex;
+    align-items: center;
+    position: relative;
+    width: 1200px; /* 时间轴宽度 */
+    height: 600px; /* 时间轴高度 */
+    margin: 0 auto; /* 水平居中 */
+}
+
+/* 添加渐变色时间轴中心线 */
+.timeline::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50px;
+    width: 2100px;
+    height: 2px;
+    background-image: linear-gradient(to right, #ff7e5f, #1e9eb3); /* 渐变色效果 */
+    z-index: -1; /* 确保线在事件内容的下方 */
+}
+
+.event {
+    position: relative;
+    width: 150px;
+    text-align: center;
+    transition: opacity 0.5s ease;
+    opacity: 0.5;
+    margin: 0 20px; /* 事件之间的间距 */
+}
+
+/* 描述文本框的样式 */
+.description {
+    width: 300px; /* 固定宽度 */
+    margin-left: 100px; /* 调整位置 */
+    position: relative;
+    height: auto; /* 根据内容动态调整高度 */
+    top: -100px;
+    display: block; /* 确保块级显示 */
+    word-wrap: break-word; /* 自动换行 */
+    overflow-wrap: break-word; /* 自动换行 */
+    white-space: normal; /* 确保文本正常换行 */
+}
+
+.description .event-content {
+    background: #e0e0e0; /* 不同的背景颜色 */
+    border: 1px solid #ddd; /* 边框颜色 */
+    padding: 15px; /* 更多的内边距 */
+    border-radius: 8px; /* 边框圆角 */
+    text-align: left; /* 文本左对齐 */
+    width: 100%; /* 固定宽度 */
+}
+
+.event-year {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 1.2em;
+    font-weight: bold;
+    z-index: 1; /* 确保年份数字在横线上方 */
+}
+
+.event-content {
+    background: #f0f0f0;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 5px;
+    position: absolute;
+    width: 250px; /* 固定宽度 */
+    left: -100px;
+    height: auto; /* 根据内容动态调整高度 */
+    text-align: center;
+    display: block; /* 确保块级显示 */
+    word-wrap: break-word; /* 自动换行 */
+    overflow-wrap: break-word; /* 自动换行 */
+    white-space: normal; /* 确保文本正常换行 */
+}
+
+/* 上端文本框：下端与横线间隔 5px，居中对齐 */
+.event-content.top {
+    bottom: calc(50% - 10px); /* 10px = 5px 间隔 + 5px 文本框高度的一半 */
+    transform: translateY(-50%); /* 垂直居中对齐 */
+}
+
+/* 下端文本框：上端与横线间隔 5px，居中对齐 */
+.event-content.bottom {
+    top: calc(50% - 10px); /* 10px = 5px 间隔 + 5px 文本框高度的一半 */
+    transform: translateY(50%); /* 垂直居中对齐 */
+}
