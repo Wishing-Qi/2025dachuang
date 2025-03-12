@@ -1,66 +1,198 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>地图点击显示文本</title>
-    <style>
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            height: 100vh;
-        }
-        .map {
-            position: relative;
-        }
-        .map img {
-            max-width: 100%;
-            height: auto;
-        }
-        .description {
-            margin-top: 20px;
-            width: 300px;
-            padding: 15px;
-            border: 1px solid #ddd;
-            border-radius: 8px;
-            background: #e0e0e0;
-            text-align: left;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      background: radial-gradient(circle, #346c9c, #5d9ecd, #15559a);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    /* SVG 对象样式 */
+    .svg-object {
+      width: 100%;
+      height: 70vh;
+      border: none;
+      margin-top: 20px;
+    }
+
+    /* 详情窗口样式 */
+    .details {
+      display: none;
+      position: fixed;
+      bottom: 5%; /* 固定到页面的下30% */
+      left: 50%;
+      transform: translateX(-50%);
+      background: white;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      z-index: 1000;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      max-width: 600px;
+      max-height: 280px;
+      overflow: auto;
+    }
+
+    /* 详情窗口头部样式 */
+    .details-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+  </style>
+  <title>可点击的中国地图</title>
 </head>
 <body>
-    <div class="container">
-        <div class="map">
-            <img src="map.jpg" alt="地图" id="map">
-        </div>
-        <div class="description" id="description">
-            点击地图上的不同位置以显示不同的文字。
-        </div>
-    </div>
+  <!-- 使用 <object> 标签嵌入 SVG 文件 -->
+  <object id="svg-map" class="svg-object" type="image/svg+xml" data="assets/pics/chinaHigh.svg">
+    <p>您的浏览器不支持 SVG 文件。</p>
+  </object>
 
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            const map = document.getElementById('map');
-            const description = document.getElementById('description');
+  <!-- 详情窗口 -->
+  <div id="details" class="details">
+    <h3 id="details-title"></h3>
+    <div id="details-content"></div>
+  </div>
 
-            map.addEventListener('click', (event) => {
-                const x = event.offsetX;
-                const y = event.offsetY;
+  <script>
+    const customInfo = {
+      "Hebei": {
+        title: "唐山皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>河北唐山</p>
+          <p><strong>材质：</strong>驴皮</p>
+          <p><strong>艺术特点：</strong>环勾眉眼、通天鼻；滦州影调，掐嗓唱法独特；剧本丰富（现存500多部）</p>
+          <p><strong>代表剧目：</strong>《五锋会》《二度梅》《青云剑》</p>
+          <p><Shaanxig>备注：</strong>国家级非遗，影响华北、东北地区</p>
+        `
+      },
+      "Shaanxi": {
+        title: "华县皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>陕西华县</p>
+          <p><strong>材质：</strong>牛皮</p>
+          <p><strong>艺术特点：</strong>高额头造型；“五人忙”分工（前声、签手等）；雕工精细，色彩艳丽</p>
+          <p><strong>代表剧目：</strong>《三打白骨精》《八仙过海》《白蛇传》</p>
+          <p><Gansu备注：</strong>被誉为“中华戏曲之父”，国家级非遗</p>
+        `
+      },
+      "Gansu": {
+        title: "环县道情皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>甘肃环县</p>
+          <p><strong>材质：</strong>牛皮</p>
+          <p><strong>艺术特点：</strong>结合道教音乐“道情”，唱腔高亢；造型粗犷，纹饰夸张</p>
+          <p><strong>代表剧目：</strong>《封神榜》《西游记》《白蛇传》</p>
+          <p><Zhejiangg>备注：</strong>国家级非遗，黄河流域代表性流派</p>
+        `
+      },
+      "Zhejiang": {
+        title: "海宁皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>浙江海宁</p>
+          <p><strong>材质：</strong>羊皮</p>
+          <p><strong>艺术特点：</strong>南宋遗风，重彩绘、少雕镂；唱腔融合弋阳腔、海盐腔</p>
+          <p><strong>代表剧目：</strong>《蚕花戏》《白蛇传》《封神榜》</p>
+        Shanxi<strong>备注：</strong>南方皮影代表，国家级非遗</p>
+        `
+      },
+      "Shanxi": {
+        title: "孝义皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>山西孝义</p>
+          <p><strong>材质：</strong>牛皮</p>
+          <p><strong>艺术特点：</strong>造型粗犷简练，线条遒劲；唱腔为“吹腔”（以唢呐伴奏）</p>
+          <p><strong>代表剧目：</strong>《封神榜》《西游记》《水浒传》</p>
+          <p><strong>备注：</strong>宋金时期已成熟，北方皮影早期代表</p>
+        `
+      },
+      "Guangdong": {
+        title: "陆丰皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>广东陆丰</p>
+          <p><strong>材质：</strong>牛皮/纸</p>
+          <p><strong>艺术特点：</strong>潮州皮影唯一遗存；唱腔融合闽南语与海陆丰民谣；表演细腻</p>
+          <p><strong>代表剧目：</strong>《哪吒闹海》《龟与鹤》《两朋友》</p>
+          <p><strong>备注：</strong>广东省唯一专业皮影剧团所在地</p>
+        `
+      },
+      "Hubei": {
+        title: "沔阳皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>湖北仙桃（原沔阳）</p>
+          <p><strong>材质：</strong>牛皮</p>
+          <p><strong>艺术特点：</strong>“门神谱”大皮影；唱腔融合楚剧、汉剧；方言对白幽默</p>
+          <p><strong>代表剧目：</strong>《岳飞传》《杨家将》《水浒传》</p>
+          <p><strong>备注：</strong>江汉平原代表性流派，国家级非遗</p>
+        `
+      },
+      "Beijing": {
+        title: "北京皮影",
+        content: `
+          <p><strong>分布地区：</strong>北京</p>
+          <p><strong>材质：</strong>驴皮</p>
+          <p><strong>艺术特点：</strong>精致透视效果，融合京剧元素；头身可拆分组合</p>
+          <p><strong>代表剧目：</strong>《白蛇传》《西游记》《惩恶扬善小哪吒》</p>
+          <p><strong>备注：</strong>西派皮影代表，都市京味儿风格</p>
+        `
+      },
+      "Shandong": {
+        title: "泰山皮影戏",
+        content: `
+          <p><strong>分布地区：</strong>山东泰安</p>
+          <p><strong>材质：</strong>驴皮</p>
+          <p><strong>艺术特点：</strong>“十不闲”技艺（一人操控多角色）；唱腔融合地方曲艺</p>
+          <p><strong>代表剧目：</strong>《泰山石敢当》《西游记》《封神榜》</p>
+          <p><strong>备注：</strong>以范正安为代表的独特技艺</p>
+        `
+      },
+      "未知区域": {
+        title: "未知区域",
+        content: "<p>该区域没有详细信息。</p>"
+      }
+    };
 
-                // 根据点击位置显示不同的文字
-                if (x < map.width / 2 && y < map.height / 2) {
-                    description.textContent = '你点击了地图的左上角区域。';
-                } else if (x >= map.width / 2 && y < map.height / 2) {
-                    description.textContent = '你点击了地图的右上角区域。';
-                } else if (x < map.width / 2 && y >= map.height / 2) {
-                    description.textContent = '你点击了地图的左下角区域。';
-                } else {
-                    description.textContent = '你点击了地图的右下角区域。';
-                }
-            });
+    const svgObject = document.getElementById("svg-map");
+    const detailsWindow = document.getElementById("details");
+    const detailsTitle = document.getElementById("details-title");
+    const detailsContent = document.getElementById("details-content");
+    let currentActiveElement = null;
+
+    svgObject.addEventListener("load", () => {
+      const svgDoc = svgObject.contentDocument;
+      const paths = svgDoc.querySelectorAll("path.highlightland");
+
+      paths.forEach(path => {
+        path.addEventListener("click", () => {
+          const title = path.getAttribute("title") || "未知区域";
+          const info = customInfo[title] || customInfo["未知区域"];
+
+          if (currentActiveElement) {
+            currentActiveElement.style.fill = "#74759b";
+          }
+
+          if (currentActiveElement === path) {
+            detailsWindow.style.display = "none";
+            currentActiveElement = null;
+          } else {
+            detailsWindow.style.display = "block";
+            detailsTitle.innerHTML = info.title;
+            detailsContent.innerHTML = info.content;
+
+            path.style.fill = "#de1c31";
+            currentActiveElement = path;
+          }
         });
-    </script>
+      });
+    });
+  </script>
 </body>
 </html>
